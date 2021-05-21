@@ -1,0 +1,60 @@
+name: tests
+on:
+  pull_request:
+    branches:
+      - staging
+
+jobs:
+  cypress:
+    name: Cypress
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout current branch
+        uses: actions/checkout@v2
+        with:
+          path: client
+
+      - name: checkout server
+        uses: actions/checkout@v2
+        with:
+          repository: prathd/dejavu-server
+          path: server
+          ref: staging
+
+      - name: setup client
+        run: cd client && yarn dev:setup
+
+      - name: start client
+        run: cd client && yarn dev > /dev/null 2>&1 &
+
+      - name: setup server
+        run: cd server && yarn dev:setup
+
+      - name: start server
+        run: cd server && yarn dev > /dev/null 2>&1 &
+
+      - name: run cypress
+        run: cd client && yarn cypress run --headless --browser chrome
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: install node v14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.15.1
+
+      - name: yarn install
+        run: yarn install
+
+      - name: lint
+        run: yarn lint
+
+      - name: typecheck
+        run: yarn typecheck
+
+      - name: build
+        run: yarn build

@@ -1,0 +1,31 @@
+{
+  "presets": ["next/babel", "@emotion/babel-preset-css-prop"],
+  "env": {
+    "production": {
+      "plugins": ["lodash", "emotion", "inline-react-svg"]
+    },
+    "staging": {
+      "plugins": ["lodash", "emotion", "inline-react-svg"]
+    },
+    "development": {
+      "plugins": [
+        ["lodash"],
+        ["emotion", { "sourceMap": true }],
+        [
+          "module-resolver",
+          {
+            "root": ["."],
+            "alias": {
+              "@app": "./",
+              "@lib": "./lib",
+              "@components": "./components",
+              "@graphql": "./graphql"
+            },
+            "extensions": [".js", ".ts", ".tsx"]
+          }
+        ],
+        ["inline-react-svg"]
+      ]
+    }
+  }
+}
