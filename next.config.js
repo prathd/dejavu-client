@@ -52,6 +52,7 @@ module.exports = withPlugins(
       HEROKU_SLUG_COMMIT: process.env.HEROKU_SLUG_COMMIT,
       SENTRY_DSN: process.env.SENTRY_DSN,
       HEAP_ID: process.env.HEAP_ID,
+      PLACES_API_KEY: process.env.PLACES_API_KEY
     },
   }
 );

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useApolloClient } from "@apollo/client";
 import { useLogin } from "@app/graphql/hooks/useLogin";
-import * as S from "../styled";
+import * as S from "../../styled";
 
 type LoginInputs = {
   email: string;

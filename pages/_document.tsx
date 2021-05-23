@@ -29,6 +29,9 @@ export default class MyDocument extends Document {
               key={i} // eslint-disable-line react/no-array-index-key
             />
           ))}
+          <script
+            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.PLACES_API_KEY}&libraries=places`}
+          />
           <meta charSet="utf-8" />
           <Heap redact />
         </Head>

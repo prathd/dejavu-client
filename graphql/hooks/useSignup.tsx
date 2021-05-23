@@ -10,6 +10,7 @@ const SIGN_UP = gql`
       email
       firstName
       lastName
+      phone
     }
   }
 `;
@@ -29,7 +30,7 @@ export const useSignup = client => {
     },
   });
 
-  return (firstName: string, lastName: string, email: string, password: string) =>
+  return (firstName: string, lastName: string, email: string, password: string, phone: string) =>
     signup({
       variables: {
         data: {
@@ -37,6 +38,7 @@ export const useSignup = client => {
           lastName,
           email,
           password,
+          phone,
         },
       },
     });
