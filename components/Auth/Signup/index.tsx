@@ -2,6 +2,7 @@ import { useApolloClient } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useSignup } from "@app/graphql/hooks/useSignup";
 import * as S from "../../styled";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 type SignupInputs = {
   firstName: string;
@@ -9,6 +10,7 @@ type SignupInputs = {
   email: string;
   password: string;
   phone: string;
+  subscribe: boolean;
 };
 
 export const Signup = () => {
@@ -16,7 +18,7 @@ export const Signup = () => {
   const signup = useSignup(client);
   const { register, handleSubmit } = useForm<SignupInputs>();
   const onSubmit = data =>
-    signup(data.firstName, data.lastName, data.email, data.password, data.phone);
+    signup(data.firstName, data.lastName, data.email, data.password, data.phone, data.subscribe);
 
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
@@ -25,6 +27,11 @@ export const Signup = () => {
       <S.Input name="email" placeholder="Email" ref={register({ required: true })} />
       <S.Input name="password" placeholder="Password" ref={register({ required: true })} />
       <S.Input name="phone" placeholder="Phone Number" ref={register({ required: true })} />
+      <FormControlLabel
+        control={<S.Checkbox name="subscribe" color="primary" />}
+        label="Subscribe to Newsletter"
+        inputRef={register}
+      />
       <S.Input type="submit" />
     </S.Form>
   );

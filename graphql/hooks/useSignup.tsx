@@ -30,7 +30,14 @@ export const useSignup = client => {
     },
   });
 
-  return (firstName: string, lastName: string, email: string, password: string, phone: string) =>
+  return (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    phone: string,
+    subscribe: boolean
+  ) =>
     signup({
       variables: {
         data: {
@@ -39,6 +46,7 @@ export const useSignup = client => {
           email,
           password,
           phone,
+          subscribe,
         },
       },
     });

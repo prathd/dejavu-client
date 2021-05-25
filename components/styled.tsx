@@ -1,4 +1,5 @@
 import styled from "@components/UI/styled";
+import MaterialUICheckbox from "@material-ui/core/Checkbox";
 
 export const Form = styled.form`
   display: flex;
@@ -9,3 +10,5 @@ export const Form = styled.form`
 export const Input = styled.input`
   margin-bottom: 20px;
 `;
+
+export const Checkbox = styled(MaterialUICheckbox)``;
