@@ -1,5 +1,6 @@
 import { useCreateGeneration } from "@app/graphql/hooks/useCreateGeneration";
 import { useCreateMemory } from "@app/graphql/hooks/useCreateMemory";
+import toaster from "@app/lib/toaster";
 import { useForm } from "react-hook-form";
 import * as S from "../styled";
 
@@ -24,8 +25,12 @@ export const AddGeneration = () => {
   const createGeneration = useCreateGeneration();
 
   const onSubmit = (data: AddGenerationInput) => {
-    createGeneration(data.name, data.startYear, data.endYear);
-    reset();
+    try {
+      createGeneration(data.name, data.startYear, data.endYear);
+      reset();
+    } catch (ex) {
+      toaster.error(ex.message);
+    }
   };
 
   return (
@@ -53,16 +58,20 @@ export const AddMemory = () => {
   const createMemory = useCreateMemory();
 
   const onSubmit = (data: AddMemoryInput) => {
-    createMemory(
-      data.title,
-      data.description,
-      data.year,
-      data.generationNames,
-      data.location,
-      data.imageUrl,
-      data.videoUrl
-    );
-    reset();
+    try {
+      createMemory(
+        data.title,
+        data.description,
+        data.year,
+        data.generationNames,
+        data.location,
+        data.imageUrl,
+        data.videoUrl
+      );
+      reset();
+    } catch (ex) {
+      toaster.error(ex.message);
+    }
   };
 
   return (
