@@ -11,8 +11,6 @@ export const Input = styled.input`
   margin-bottom: 20px;
 `;
 
-export const Label = styled.label`
-  margin-top: 20px;
-`;
+export const Label = styled.label``;
 
 export const Checkbox = styled(MaterialUICheckbox)``;

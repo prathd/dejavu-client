@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import * as S from "../styled";
 import { useState } from "react";
 import { LocationPicker } from "../UI/LocationInput";
+import toaster from "@app/lib/toaster";
 
 type LandingInputs = {
   birthday: number;
@@ -12,11 +13,17 @@ type LandingInputs = {
 export const InitializeUser = () => {
   const { register, handleSubmit, setValue } = useForm<LandingInputs>();
   const [, setCookies] = useCookies(["birthday", "city"]);
+  const [placeSelected, setPlaceSelected] = useState(false);
+  const [place, setPlace] = useState(null);
   const [cityName, setCityName] = useState("");
   const onSubmit = async (data: LandingInputs) => {
+    if (!placeSelected) {
+      toaster.error("Please choose a city from autocomplete");
+      return;
+    }
     setCookies("birthday", data.birthday);
-    setCookies("city", data.city);
-    console.log(data);
+    setCookies("city", place.formattedAddress);
+    setCookies("latlng", place.lat + "," + place.lng);
   };
 
   return (
@@ -25,8 +32,15 @@ export const InitializeUser = () => {
       <LocationPicker
         name="city"
         onChange={e => {
-          setValue("city", e.target.value);
+          setPlaceSelected(false);
           setCityName(e.target.value);
+          console.log("DFHDFJFG");
+        }}
+        onPlaceSelected={place => {
+          setPlace(place);
+          setValue("city", place.formattedAddress);
+          setCityName(place.formattedAddress);
+          setPlaceSelected(true);
         }}
         cityName={cityName}
       />

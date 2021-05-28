@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { ME } from "@graphql/queries";
 import redirect from "@app/lib/redirect";
+import { Location } from "@components/UI/LocationInput";
 
 const SIGN_UP = gql`
   mutation signup($data: CreateUserInput!) {
@@ -11,6 +12,10 @@ const SIGN_UP = gql`
       firstName
       lastName
       phone
+      location {
+        lat
+        lng
+      }
     }
   }
 `;
@@ -36,6 +41,8 @@ export const useSignup = client => {
     email: string,
     password: string,
     phone: string,
+    birthday: Date,
+    location: Location,
     subscribe: boolean
   ) =>
     signup({
@@ -46,6 +53,11 @@ export const useSignup = client => {
           email,
           password,
           phone,
+          birthday,
+          lat: location.lat,
+          lng: location.lng,
+          formattedAddress: location.formattedAddress,
+          placeId: location.placeId,
           subscribe,
         },
       },

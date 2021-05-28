@@ -1,46 +1,68 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePlacesWidget } from "react-google-autocomplete";
 import Geocode from "react-geocode";
 import * as S from "../styled";
+import { useCookies } from "react-cookie";
+
+export interface Location {
+  formattedAddress: string;
+  lat: number;
+  lng: number;
+  city: string;
+  state: string;
+  country: string;
+  placeId: string;
+}
 
 export const LocationPicker = props => {
+  const [cookies] = useCookies(["latlng"]);
   const [init, setInit] = useState(false);
-  const [cityName, setCityName] = useState(props.cityName);
+
+  const getAddressComponents = (result): Location => {
+    let placeId = result.place_id,
+      formattedAddress = result.formatted_address,
+      lat =
+        typeof result.geometry.location.lat === "function"
+          ? result.geometry.location.lat()
+          : result.geometry.location.lat,
+      lng =
+        typeof result.geometry.location.lng === "function"
+          ? result.geometry.location.lng()
+          : result.geometry.location.lng,
+      city,
+      state,
+      country;
+    result.address_components.forEach(component => {
+      if (component.types.includes("locality")) city = component.long_name;
+      else if (component.types.includes("administrative_area_level_1"))
+        state = component.short_name;
+      else if (component.types.includes("country")) country = component.long_name;
+    });
+    return { placeId, formattedAddress, lat, lng, city, state, country };
+  };
 
   const { ref } = usePlacesWidget({
     apiKey: process.env.PLACES_API_KEY,
-    onPlaceSelected: place => console.log(place),
+    onPlaceSelected: place => {
+      const location = getAddressComponents(place);
+      props.onPlaceSelected(location);
+    },
   });
-
-  useEffect(() => {
-    setCityName(props.cityName);
-  }, [props.cityName]);
 
   if (!init && navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(async response => {
-      const lat = response.coords.latitude;
-      const lng = response.coords.longitude;
+      const lat = cookies.latlng ? cookies.latlng.split(",")[0] : response.coords.latitude;
+      const lng = cookies.latlng ? cookies.latlng.split(",")[1] : response.coords.longitude;
       Geocode.setApiKey(process.env.PLACES_API_KEY);
       const geocode = await Geocode.fromLatLng(lat, lng);
       setInit(true);
-      let city, state, country;
-      for (let i = 0; i < geocode.results[0].address_components.length; i++) {
-        for (let j = 0; j < geocode.results[0].address_components[i].types.length; j++) {
-          switch (geocode.results[0].address_components[i].types[j]) {
-            case "locality":
-              city = geocode.results[0].address_components[i].long_name;
-              break;
-            case "administrative_area_level_1":
-              state = geocode.results[0].address_components[i].short_name;
-              break;
-            case "country":
-              country = geocode.results[0].address_components[i].long_name;
-              break;
-          }
+      geocode.results.forEach(result => {
+        if (result.types.includes("locality") && result.types.includes("political")) {
+          console.log(result);
+          const location = getAddressComponents(result);
+          props.onPlaceSelected(location);
         }
-      }
-      setCityName(city + ", " + state + ", " + country);
-      props.onChange({ target: { value: city + ", " + state + ", " + country } });
+      });
     });
   }
   return (
@@ -48,9 +70,10 @@ export const LocationPicker = props => {
       name={props.name}
       type="text"
       autoComplete="off"
-      onChange={props.onChange}
-      value={cityName}
-      placeholder={props.placeholder}
+      onChange={e => {
+        props.onChange(e);
+      }}
+      value={props.cityName}
       ref={ref}
     />
   );
