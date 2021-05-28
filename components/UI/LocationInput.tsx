@@ -19,7 +19,7 @@ export const LocationPicker = props => {
   const [init, setInit] = useState(false);
 
   const getAddressComponents = (result): Location => {
-    let placeId = result.place_id,
+    const placeId = result.place_id,
       formattedAddress = result.formatted_address,
       lat =
         typeof result.geometry.location.lat === "function"
@@ -28,10 +28,8 @@ export const LocationPicker = props => {
       lng =
         typeof result.geometry.location.lng === "function"
           ? result.geometry.location.lng()
-          : result.geometry.location.lng,
-      city,
-      state,
-      country;
+          : result.geometry.location.lng;
+    let city, state, country;
     result.address_components.forEach(component => {
       if (component.types.includes("locality")) city = component.long_name;
       else if (component.types.includes("administrative_area_level_1"))
@@ -58,22 +56,22 @@ export const LocationPicker = props => {
       setInit(true);
       geocode.results.forEach(result => {
         if (result.types.includes("locality") && result.types.includes("political")) {
-          console.log(result);
           const location = getAddressComponents(result);
           props.onPlaceSelected(location);
         }
       });
     });
   }
+  const { name, value } = props;
   return (
     <S.Input
-      name={props.name}
+      name={name}
       type="text"
       autoComplete="off"
       onChange={e => {
         props.onChange(e);
       }}
-      value={props.cityName}
+      value={value}
       ref={ref}
     />
   );

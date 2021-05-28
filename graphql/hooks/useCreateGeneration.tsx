@@ -19,8 +19,8 @@ export const useCreateGeneration = () => {
       variables: {
         data: {
           name,
-          startYear: parseInt(startYear),
-          endYear: parseInt(endYear),
+          startYear: parseInt(startYear, 10),
+          endYear: parseInt(endYear, 10),
         },
       },
     });

@@ -34,8 +34,7 @@ export const Signup = () => {
     }
     setCookies("birthday", data.birthday);
     setCookies("city", place.formattedAddress);
-    setCookies("latlng", place.lat + "," + place.lng);
-    console.log(new Date(data.birthday));
+    setCookies("latlng", `${place.lat},${place.lng}`);
     signup(
       data.firstName,
       data.lastName,
@@ -94,7 +93,6 @@ export const Signup = () => {
         onChange={e => {
           setPlaceSelected(false);
           setCityName(e.target.value);
-          console.log("DFHDFJFG");
         }}
         onPlaceSelected={place => {
           setPlace(place);

@@ -21,6 +21,7 @@ export const useCreateMemory = () => {
     description: string,
     year,
     generationNames: string,
+    categoryNames: string,
     location: string,
     imageUrl: string,
     videoUrl: string
@@ -30,8 +31,9 @@ export const useCreateMemory = () => {
         data: {
           title,
           description,
-          year: parseInt(year),
+          year: parseInt(year, 10),
           generationNames,
+          categoryNames,
           location,
           imageUrl,
           videoUrl,

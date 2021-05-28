@@ -23,18 +23,23 @@ export const InitializeUser = () => {
     }
     setCookies("birthday", data.birthday);
     setCookies("city", place.formattedAddress);
-    setCookies("latlng", place.lat + "," + place.lng);
+    setCookies("latlng", `${place.lat},${place.lng}`);
   };
 
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
-      <S.Input name="birthday" placeholder="Birthday" ref={register({ required: true })} />
+      <S.Label>Birthday</S.Label>
+      <S.Input
+        name="birthday"
+        type="date"
+        placeholder="Birthday"
+        ref={register({ required: true })}
+      />
       <LocationPicker
         name="city"
         onChange={e => {
           setPlaceSelected(false);
           setCityName(e.target.value);
-          console.log("DFHDFJFG");
         }}
         onPlaceSelected={place => {
           setPlace(place);

@@ -8,7 +8,7 @@ import { initializeApollo } from "@lib/apollo";
 import Button from "@app/components/UI/Button";
 import { useLogout } from "@app/graphql/hooks/useLogout";
 import { useApolloClient } from "@apollo/client";
-import { AddGeneration, AddMemory } from "@app/components/Admin";
+import { AddCategory, AddGeneration, AddMemory } from "@app/components/Admin";
 
 const AdminPage = () => {
   const client = useApolloClient();
@@ -21,6 +21,7 @@ const AdminPage = () => {
       </Link>
       <Button onClick={logout}>Logout</Button>
       <AddGeneration />
+      <AddCategory />
       <AddMemory />
     </NavigationHOC>
   );
