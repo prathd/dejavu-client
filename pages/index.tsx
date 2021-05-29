@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { withProfiler } from "@sentry/react";
 import { useApolloClient } from "@apollo/client";
 import NavigationHOC from "@app/layouts/NavigationHOC";
@@ -9,11 +9,17 @@ import { useLogout } from "@app/graphql/hooks/useLogout";
 import Link from "next/link";
 import { InitializeUser } from "@app/components/Landing";
 import { useCookies } from "react-cookie";
-
+import redirect from "@app/lib/redirect";
 const Index = ({ loggedInUser }) => {
   const client = useApolloClient();
   const logout = useLogout(client);
   const [cookies] = useCookies(["birthday", "city"]);
+
+  useEffect(() => {
+    if (cookies.birthday && cookies.city) {
+      redirect({}, "/home");
+    }
+  }, [cookies]);
 
   return (
     <NavigationHOC>

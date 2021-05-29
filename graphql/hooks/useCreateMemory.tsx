@@ -6,7 +6,12 @@ const CREATE_MEMORY = gql`
     createMemory(data: $data) {
       title
       description
-      location
+      location {
+        lat
+        lng
+        placeId
+        formattedAddress
+      }
       imageUrl
       videoUrl
     }
@@ -22,7 +27,10 @@ export const useCreateMemory = () => {
     year,
     generationNames: string,
     categoryNames: string,
-    location: string,
+    lat: string,
+    lng: string,
+    placeId: string,
+    formattedAddress: string,
     imageUrl: string,
     videoUrl: string
   ) => {
@@ -34,7 +42,10 @@ export const useCreateMemory = () => {
           year: parseInt(year, 10),
           generationNames,
           categoryNames,
-          location,
+          lat,
+          lng,
+          placeId,
+          formattedAddress,
           imageUrl,
           videoUrl,
         },

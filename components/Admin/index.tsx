@@ -8,6 +8,7 @@ import toaster from "@app/lib/toaster";
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as S from "../styled";
+import { LocationPicker } from "../UI/LocationInput";
 
 interface AddGenerationInput {
   name: string;
@@ -86,12 +87,15 @@ export const AddCategory = () => {
 
 export const AddMemory = () => {
   const client = useApolloClient();
-  const { handleSubmit, register, reset, control } = useForm<AddMemoryInput>();
+  const { handleSubmit, register, reset, setValue, control } = useForm<AddMemoryInput>();
   const createMemory = useCreateMemory();
   const getGenerations = useGetGenerations(client);
   const getCategories = useGetCategories(client);
   const [generations, setGenerations] = useState(null);
   const [categories, setCategories] = useState(null);
+  const [, setPlaceSelected] = useState(false);
+  const [place, setPlace] = useState(null);
+  const [cityName, setCityName] = useState("");
 
   useEffect(() => {
     const initialize = async () => {
@@ -111,7 +115,7 @@ export const AddMemory = () => {
       );
     };
     initialize();
-  });
+  }, []);
 
   const onSubmit = (data: AddMemoryInput) => {
     try {
@@ -121,7 +125,10 @@ export const AddMemory = () => {
         data.year,
         data.generations.map(generation => generation.value).join(","),
         data.categories.map(category => category.value).join(","),
-        data.location,
+        place.lat,
+        place.lng,
+        place.placeId,
+        place.formattedAddress,
         data.imageUrl,
         data.videoUrl
       );
@@ -166,7 +173,20 @@ export const AddMemory = () => {
           />
         )}
       />
-      <S.Input name="location" placeholder="Memory Location" ref={register({ required: true })} />
+      <LocationPicker
+        name="location"
+        onChange={e => {
+          setPlaceSelected(false);
+          setCityName(e.target.value);
+        }}
+        onPlaceSelected={place => {
+          setPlace(place);
+          setValue("city", place.formattedAddress);
+          setCityName(place.formattedAddress);
+          setPlaceSelected(true);
+        }}
+        cityName={cityName}
+      />
       <S.Input name="imageUrl" placeholder="Image Link" ref={register({ required: true })} />
       <S.Input name="videoUrl" placeholder="Video Link" ref={register({ required: true })} />
       <S.Input type="submit" />

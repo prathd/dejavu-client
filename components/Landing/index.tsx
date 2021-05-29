@@ -47,7 +47,7 @@ export const InitializeUser = () => {
           setCityName(place.formattedAddress);
           setPlaceSelected(true);
         }}
-        cityName={cityName}
+        value={cityName}
       />
       <S.Input type="submit" />
     </S.Form>
