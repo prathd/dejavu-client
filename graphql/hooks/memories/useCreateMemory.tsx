@@ -14,6 +14,20 @@ const CREATE_MEMORY = gql`
       }
       imageUrl
       videoUrl
+      user {
+        id
+        email
+        firstName
+        lastName
+        phone
+        location {
+          lat
+          lng
+          placeId
+          formattedAddress
+        }
+      }
+      approvalStatus
     }
   }
 `;
@@ -32,7 +46,9 @@ export const useCreateMemory = () => {
     placeId: string,
     formattedAddress: string,
     imageUrl: string,
-    videoUrl: string
+    videoUrl: string,
+    userId: string,
+    approvalStatus: string
   ) => {
     return createMemory({
       variables: {
@@ -48,6 +64,8 @@ export const useCreateMemory = () => {
           formattedAddress,
           imageUrl,
           videoUrl,
+          userId,
+          approvalStatus,
         },
       },
     });

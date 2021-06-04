@@ -26,3 +26,7 @@ export const MemoryHeader = styled.h2`
 export const MemoryBody = styled.ul`
   list-style-type: none;
 `;
+
+export const MemoryDiv = styled.div`
+  margin-bottom: 20px;
+`;

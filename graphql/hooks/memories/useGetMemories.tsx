@@ -25,6 +25,7 @@ const GET_MEMORIES = gql`
       }
       imageUrl
       videoUrl
+      approvalStatus
     }
   }
 `;

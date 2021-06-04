@@ -1,9 +1,8 @@
 import { useApolloClient } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { useSignup } from "@app/graphql/hooks/useSignup";
+import { useSignup } from "@app/graphql/hooks/user/useSignup";
 import * as S from "../../styled";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import toaster from "@app/lib/toaster";
 import { LocationPicker } from "../../UI/LocationInput";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
@@ -14,7 +13,6 @@ type SignupInputs = {
   email: string;
   password: string;
   phone: string;
-  city: any;
   birthday: string;
   subscribe: boolean;
 };
@@ -22,16 +20,11 @@ type SignupInputs = {
 export const Signup = () => {
   const client = useApolloClient();
   const signup = useSignup(client);
-  const { register, handleSubmit, setValue } = useForm<SignupInputs>();
-  const [placeSelected, setPlaceSelected] = useState(false);
+  const { register, handleSubmit } = useForm<SignupInputs>();
   const [place, setPlace] = useState(null);
   const [cityName, setCityName] = useState("");
   const [cookies, setCookies] = useCookies(["city", "birthday", "latlng"]);
   const onSubmit = async (data: SignupInputs) => {
-    if (!placeSelected) {
-      toaster.error("Please choose a city from autocomplete");
-      return;
-    }
     setCookies("birthday", data.birthday);
     setCookies("city", place.formattedAddress);
     setCookies("latlng", `${place.lat},${place.lng}`);
@@ -91,16 +84,13 @@ export const Signup = () => {
       <LocationPicker
         name="city"
         onChange={e => {
-          setPlaceSelected(false);
           setCityName(e.target.value);
         }}
         onPlaceSelected={place => {
           setPlace(place);
-          setValue("city", place.formattedAddress);
           setCityName(place.formattedAddress);
-          setPlaceSelected(true);
         }}
-        cityName={cityName}
+        value={cityName}
       />
       <FormControlLabel
         control={<S.Checkbox name="subscribe" color="primary" />}

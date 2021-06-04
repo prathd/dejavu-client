@@ -2,7 +2,7 @@ import cookie from "cookie";
 import { ApolloClient } from "@apollo/client";
 import redirect from "@app/lib/redirect";
 import toaster from "@app/lib/toaster";
-import { LOGOUT } from "../queries";
+import { LOGOUT } from "../../queries";
 
 export const useLogout = (client: ApolloClient<any>) => {
   return async () => {

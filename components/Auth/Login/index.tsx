@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useApolloClient } from "@apollo/client";
-import { useLogin } from "@app/graphql/hooks/useLogin";
+import { useLogin } from "@app/graphql/hooks/user/useLogin";
 import * as S from "../../styled";
 import toaster from "@app/lib/toaster";
 

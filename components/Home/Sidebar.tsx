@@ -1,7 +1,6 @@
 import { Checkbox, FormGroup } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import React from "react";
-import * as S from "../styled";
 
 export const SideBar = props => {
   const allSelected = obj => {
@@ -20,7 +19,7 @@ export const SideBar = props => {
   };
 
   return (
-    <S.SideBarDiv>
+    <>
       <h2>Categories</h2>
       <FormGroup row={false}>
         {props.categories.map(category => (
@@ -81,6 +80,6 @@ export const SideBar = props => {
           label={"Select All Categories"}
         />
       </FormGroup>
-    </S.SideBarDiv>
+    </>
   );
 };

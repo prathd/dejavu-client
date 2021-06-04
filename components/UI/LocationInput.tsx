@@ -16,7 +16,7 @@ export interface Location {
 
 export const LocationPicker = props => {
   const [cookies] = useCookies(["latlng"]);
-  const [init, setInit] = useState(false);
+  const [init, setInit] = useState(props.initFromCookie !== undefined && !props.initFromCookie);
 
   const getAddressComponents = (result): Location => {
     const placeId = result.place_id,
@@ -62,17 +62,20 @@ export const LocationPicker = props => {
       });
     });
   }
-  const { name, value } = props;
   return (
     <S.Input
-      name={name}
+      name={props.name}
       type="text"
       autoComplete="off"
       onChange={e => {
         props.onChange(e);
       }}
-      value={value}
+      onBlur={e => {
+        e.target.value = "";
+        props.onChange(e);
+      }}
       ref={ref}
+      value={props.value}
     />
   );
 };

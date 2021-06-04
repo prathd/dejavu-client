@@ -1,9 +1,9 @@
 import { useApolloClient } from "@apollo/client";
-import { useCreateCategory } from "@app/graphql/hooks/useCreateCategory";
-import { useCreateGeneration } from "@app/graphql/hooks/useCreateGeneration";
-import { useCreateMemory } from "@app/graphql/hooks/useCreateMemory";
-import { useGetCategories } from "@app/graphql/hooks/useGetCategories";
-import { useGetGenerations } from "@app/graphql/hooks/useGetGenerations";
+import { useCreateCategory } from "@app/graphql/hooks/memories/useCreateCategory";
+import { useCreateGeneration } from "@app/graphql/hooks/memories/useCreateGeneration";
+import { useCreateMemory } from "@app/graphql/hooks/memories/useCreateMemory";
+import { useGetCategories } from "@app/graphql/hooks/memories/useGetCategories";
+import { useGetGenerations } from "@app/graphql/hooks/memories/useGetGenerations";
 import toaster from "@app/lib/toaster";
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -31,14 +31,15 @@ interface AddMemoryInput {
   videoUrl: string;
 }
 
-export const AddGeneration = () => {
+const AddGeneration = ({ onAddGeneration }) => {
   const { handleSubmit, register, reset } = useForm<AddGenerationInput>();
   const createGeneration = useCreateGeneration();
 
-  const onSubmit = (data: AddGenerationInput) => {
+  const onSubmit = async (data: AddGenerationInput) => {
     try {
-      createGeneration(data.name, data.startYear, data.endYear);
+      const generation = await createGeneration(data.name, data.startYear, data.endYear);
       reset();
+      onAddGeneration(generation.data.createGeneration);
     } catch (ex) {
       toaster.error(ex.message);
     }
@@ -64,13 +65,14 @@ export const AddGeneration = () => {
   );
 };
 
-export const AddCategory = () => {
+export const AddCategory = ({ onAddCategory }) => {
   const { handleSubmit, register, reset } = useForm<AddCategoryInput>();
   const createCategory = useCreateCategory();
 
-  const onSubmit = (data: AddCategoryInput) => {
+  const onSubmit = async (data: AddCategoryInput) => {
     try {
-      createCategory(data.name);
+      const category = await createCategory(data.name);
+      onAddCategory(category.data.createCategory);
       reset();
     } catch (ex) {
       toaster.error(ex.message);
@@ -85,39 +87,14 @@ export const AddCategory = () => {
   );
 };
 
-export const AddMemory = () => {
-  const client = useApolloClient();
+const AddMemory = ({ user, generations, categories }) => {
   const { handleSubmit, register, reset, setValue, control } = useForm<AddMemoryInput>();
   const createMemory = useCreateMemory();
-  const getGenerations = useGetGenerations(client);
-  const getCategories = useGetCategories(client);
-  const [generations, setGenerations] = useState(null);
-  const [categories, setCategories] = useState(null);
   const [, setPlaceSelected] = useState(false);
   const [place, setPlace] = useState(null);
   const [cityName, setCityName] = useState("");
 
-  useEffect(() => {
-    const initialize = async () => {
-      const generationsResponse = await getGenerations();
-      setGenerations(
-        generationsResponse.data.getGenerations.map(generation => ({
-          value: generation.id,
-          label: generation.name,
-        }))
-      );
-      const categoriesResponse = await getCategories();
-      setCategories(
-        categoriesResponse.data.getCategories.map(category => ({
-          value: category.id,
-          label: category.name,
-        }))
-      );
-    };
-    initialize();
-  }, []);
-
-  const onSubmit = (data: AddMemoryInput) => {
+  const onSubmit = async (data: AddMemoryInput) => {
     try {
       createMemory(
         data.title,
@@ -130,7 +107,9 @@ export const AddMemory = () => {
         place.placeId,
         place.formattedAddress,
         data.imageUrl,
-        data.videoUrl
+        data.videoUrl,
+        user.id,
+        "Approved"
       );
       reset();
     } catch (ex) {
@@ -191,5 +170,54 @@ export const AddMemory = () => {
       <S.Input name="videoUrl" placeholder="Video Link" ref={register({ required: true })} />
       <S.Input type="submit" />
     </S.Form>
+  );
+};
+
+export const Admin = ({ user }) => {
+  const client = useApolloClient();
+  const getGenerations = useGetGenerations(client);
+  const getCategories = useGetCategories(client);
+  const [generations, setGenerations] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const updateGenerations = async () => {
+    const generationsResponse = await getGenerations();
+    setGenerations(
+      generationsResponse.data.getGenerations.map(generation => ({
+        value: generation.id,
+        label: generation.name,
+      }))
+    );
+  };
+
+  const updateCategories = async () => {
+    const categoriesResponse = await getCategories();
+    setCategories(
+      categoriesResponse.data.getCategories.map(category => ({
+        value: category.id,
+        label: category.name,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    updateGenerations();
+    updateCategories();
+  }, []);
+
+  return (
+    <>
+      <AddGeneration
+        onAddGeneration={generation =>
+          setGenerations([...generations, { value: generation.id, label: generation.name }])
+        }
+      />
+      <AddCategory
+        onAddCategory={category =>
+          setCategories([...categories, { value: category.id, label: category.name }])
+        }
+      />
+      <AddMemory generations={generations} categories={categories} user={user} />
+    </>
   );
 };

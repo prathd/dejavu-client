@@ -1,6 +1,6 @@
 import styled from "@components/UI/styled";
 import MaterialUICheckbox from "@material-ui/core/Checkbox";
-import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
 export const Form = styled.form`
   display: flex;
@@ -16,7 +16,7 @@ export const Label = styled.label``;
 
 export const Checkbox = styled(MaterialUICheckbox)``;
 
-export const ReactSelect = styled(Select)`
+export const ReactSelect = styled(CreatableSelect)`
   margin-bottom: 20px;
 `;
 

@@ -6,13 +6,14 @@ import checkLoggedIn from "@app/lib/checkLoggedIn";
 import redirect from "@app/lib/redirect";
 import { initializeApollo } from "@lib/apollo";
 import Button from "@app/components/UI/Button";
-import { useLogout } from "@app/graphql/hooks/useLogout";
+import { useLogout } from "@app/graphql/hooks/user/useLogout";
 import { useApolloClient } from "@apollo/client";
-import { AddCategory, AddGeneration, AddMemory } from "@app/components/Admin";
+import { Admin } from "@app/components/Admin";
 
-const AdminPage = () => {
+const AdminPage = props => {
   const client = useApolloClient();
   const logout = useLogout(client);
+  const user = props.loggedInUser.me;
 
   return (
     <NavigationHOC>
@@ -20,9 +21,7 @@ const AdminPage = () => {
         <Button>Home</Button>
       </Link>
       <Button onClick={logout}>Logout</Button>
-      <AddGeneration />
-      <AddCategory />
-      <AddMemory />
+      <Admin user={user} />
     </NavigationHOC>
   );
 };

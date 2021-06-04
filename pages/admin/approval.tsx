@@ -1,16 +1,17 @@
 import React from "react";
 import { withProfiler } from "@sentry/react";
-import { useApolloClient } from "@apollo/client";
+import Link from "next/link";
 import NavigationHOC from "@app/layouts/NavigationHOC";
 import checkLoggedIn from "@app/lib/checkLoggedIn";
+import redirect from "@app/lib/redirect";
 import { initializeApollo } from "@lib/apollo";
 import Button from "@app/components/UI/Button";
 import { useLogout } from "@app/graphql/hooks/user/useLogout";
-import Link from "next/link";
+import { useApolloClient } from "@apollo/client";
+import { MemoriesApproval } from "@app/components/MemoriesApproval";
 import { NavigationBar } from "@app/components/Navigation";
-import { Home } from "@app/components/Home";
 
-const HomePage = ({ loggedInUser }) => {
+const ApprovalPage = ({ loggedInUser }) => {
   const client = useApolloClient();
   const logout = useLogout(client);
 
@@ -30,16 +31,20 @@ const HomePage = ({ loggedInUser }) => {
           <Button>Settings</Button>
         </Link>
       </NavigationBar>
-      <Home />
+      <MemoriesApproval />
     </NavigationHOC>
   );
 };
 
-HomePage.getInitialProps = async context => {
+ApprovalPage.getInitialProps = async context => {
   const apolloClient = initializeApollo(context);
   const { loggedInUser } = await checkLoggedIn(apolloClient);
+
+  if (!loggedInUser.me) {
+    redirect(context, "/home");
+  }
 
   return { loggedInUser };
 };
 
-export default withProfiler(HomePage);
+export default withProfiler(ApprovalPage);

@@ -10,6 +10,13 @@ const LOGIN = gql`
       email
       firstName
       lastName
+      phone
+      location {
+        lat
+        lng
+        placeId
+        formattedAddress
+      }
     }
   }
 `;

@@ -1,9 +1,9 @@
 import React from "react";
-import * as S from "../styled";
+import * as S from "../Home/styled";
 
 export const Memory = props => {
   return (
-    <div>
+    <S.MemoryDiv>
       <S.MemoryHeader>{props.memory.title}</S.MemoryHeader>
       <S.MemoryBody>
         <li key="description">Description: {props.memory.description}</li>
@@ -12,12 +12,12 @@ export const Memory = props => {
         <li key="year">Year: {props.memory.year}</li>
         <li key="location">Location: {props.memory.location.formattedAddress}</li>
         <li key="generation">
-          Generation: {props.memory.generations.map(generation => generation.name + " ")}
+          Generation: {props.memory.generations.map(generation => generation.name).join(", ")}
         </li>
         <li key="category">
-          Category: {props.memory.categories.map(category => category.name + " ")}
+          Category: {props.memory.categories.map(category => category.name).join(", ")}
         </li>
       </S.MemoryBody>
-    </div>
+    </S.MemoryDiv>
   );
 };

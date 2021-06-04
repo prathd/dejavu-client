@@ -5,7 +5,7 @@ import NavigationHOC from "@app/layouts/NavigationHOC";
 import checkLoggedIn from "@app/lib/checkLoggedIn";
 import { initializeApollo } from "@lib/apollo";
 import Button from "@app/components/UI/Button";
-import { useLogout } from "@app/graphql/hooks/useLogout";
+import { useLogout } from "@app/graphql/hooks/user/useLogout";
 import Link from "next/link";
 import { InitializeUser } from "@app/components/Landing";
 import { useCookies } from "react-cookie";

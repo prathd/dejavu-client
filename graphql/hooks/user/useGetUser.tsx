@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
-export const ME = gql`
-  query me {
-    me {
+const GET_USER = gql`
+  query getUser($id: String!) {
+    getUser(id: $id) {
       id
       email
       firstName
@@ -20,8 +20,6 @@ export const ME = gql`
   }
 `;
 
-export const LOGOUT = gql`
-  query logout {
-    logout
-  }
-`;
+export const useGetUser = client => {
+  return id => client.query({ query: GET_USER, variables: { id } });
+};

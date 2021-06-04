@@ -7,7 +7,9 @@ export const NavigationBar = props => {
   return (
     <S.NavigationBar>
       {children.map(element => (
-        <li key={element.props.name}>{element}</li>
+        <li key={element.props.name !== undefined ? element.props.name : element.props.href}>
+          {element}
+        </li>
       ))}
     </S.NavigationBar>
   );

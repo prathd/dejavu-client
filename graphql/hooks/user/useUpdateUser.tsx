@@ -4,9 +4,9 @@ import { ME } from "@graphql/queries";
 import redirect from "@app/lib/redirect";
 import { Location } from "@components/UI/LocationInput";
 
-const SIGN_UP = gql`
-  mutation signup($data: CreateUserInput!) {
-    signup(data: $data) {
+const UPDATE_USER = gql`
+  mutation updateUser($data: UpdateUserInput!) {
+    updateUser(data: $data) {
       id
       email
       firstName
@@ -15,17 +15,19 @@ const SIGN_UP = gql`
       location {
         lat
         lng
+        placeId
+        formattedAddress
       }
     }
   }
 `;
 
-export const useSignup = client => {
-  const [signup] = useMutation(SIGN_UP, {
-    update(cache, { data: { signup } }) {
+export const useUpdateUser = client => {
+  const [updateUser] = useMutation(UPDATE_USER, {
+    update(cache, { data: { updateUser } }) {
       cache.writeQuery({
         query: ME,
-        data: { ...signup },
+        data: { ...updateUser },
       });
 
       // Force a reload of all the current queries now that the user is logged in
@@ -36,24 +38,20 @@ export const useSignup = client => {
   });
 
   return (
+    id,
     firstName: string,
     lastName: string,
-    email: string,
-    password: string,
     phone: string,
-    birthday: Date,
     location: Location,
     subscribe: boolean
   ) =>
-    signup({
+    updateUser({
       variables: {
         data: {
+          id,
           firstName,
           lastName,
-          email,
-          password,
           phone,
-          birthday,
           lat: location.lat,
           lng: location.lng,
           formattedAddress: location.formattedAddress,
