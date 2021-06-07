@@ -13,8 +13,7 @@ type UpdateUserInputs = {
   subscribe: boolean;
 };
 
-export const UpdateUser = props => {
-  const { user } = props;
+export const UpdateUser = ({ user, readOnly, showAllFields }) => {
   const client = useApolloClient();
   const { register, handleSubmit } = useForm<UpdateUserInputs>();
   const [place, setPlace] = useState(user.location);
@@ -28,7 +27,7 @@ export const UpdateUser = props => {
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <S.Input
         name="firstName"
-        readOnly={props.readOnly}
+        readOnly={readOnly}
         autoComplete="given-name"
         placeholder="First Name"
         defaultValue={user.firstName}
@@ -36,16 +35,16 @@ export const UpdateUser = props => {
       />
       <S.Input
         name="lastName"
-        readOnly={props.readOnly}
+        readOnly={readOnly}
         autoComplete="family-name"
         placeholder="Last Name"
         defaultValue={user.lastName}
         ref={register({ required: true })}
       />
-      {props.showAllFields ? (
+      {showAllFields ? (
         <S.Input
           name="email"
-          readOnly={props.readOnly}
+          readOnly={readOnly}
           autoComplete="email"
           placeholder="Email"
           defaultValue={user.email}
@@ -54,24 +53,24 @@ export const UpdateUser = props => {
       ) : null}
       <S.Input
         name="phone"
-        readOnly={props.readOnly}
+        readOnly={readOnly}
         autoComplete="tel"
         placeholder="Phone Number"
         defaultValue={user.phone}
         ref={register({ required: true })}
       />
-      {props.showAllFields ? (
+      {showAllFields ? (
         <S.Input
           name="birthday"
-          readOnly={props.readOnly}
+          readOnly={readOnly}
           type="date"
           placeholder="Birthday"
           defaultValue={user.birthday.slice(0, 10)}
           ref={register({ required: true })}
         />
       ) : null}
-      {props.readOnly ? (
-        <S.Input name="city" readOnly={true} value={cityName} />
+      {readOnly ? (
+        <S.Input name="city" readOnly value={cityName} />
       ) : (
         <LocationPicker
           name="city"
@@ -90,7 +89,7 @@ export const UpdateUser = props => {
         control={
           <S.Checkbox
             name="subscribe"
-            readOnly={props.readOnly}
+            readOnly={readOnly}
             checked={user.subscribe}
             color="primary"
           />
@@ -98,7 +97,7 @@ export const UpdateUser = props => {
         label="Subscribe to Newsletter"
         inputRef={register}
       />
-      {props.readOnly ? null : <S.Input type="submit" />}
+      {readOnly ? null : <S.Input type="submit" />}
     </S.Form>
   );
 };

@@ -17,7 +17,6 @@ export const ChangePassword = props => {
   const { register, handleSubmit } = useForm<PasswordChange>();
   const changePassword = useChangePassword(client);
   const onSubmit = async (data: PasswordChange) => {
-    console.log(data);
     if (data.newPassword !== data.confirmNewPassword) {
       toaster.error("Old and New Passwords don't match");
       return;

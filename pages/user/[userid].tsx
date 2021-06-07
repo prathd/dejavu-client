@@ -13,18 +13,18 @@ import { useGetUser } from "@app/graphql/hooks/user/useGetUser";
 import { UserPage } from "@app/components/UserPage";
 import { useRouter } from "next/router";
 
-const User = props => {
+const User = ({ loggedInUser }) => {
   const client = useApolloClient();
   const logout = useLogout(client);
   const getUser = useGetUser(client);
   const router = useRouter();
-  const [user, setUser] = useState(props.loggedInUser.me);
+  const [user, setUser] = useState(loggedInUser.me);
 
   useEffect(() => {
     const init = async () => {
-      setUser(await getUser(router.query.userid));
+      setUser((await getUser(router.query.userid)).data.getUser);
     };
-    init;
+    init();
   }, []);
 
   return (

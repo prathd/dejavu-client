@@ -3,7 +3,6 @@ import * as S from "../Home/styled";
 import { ReactSelect } from "@components/styled";
 
 export const ApprovalMemory = ({ memory, onApprovalStatusChange }) => {
-  console.log(memory.approvalStatus);
   const options = [
     { value: "Confirmed", label: "Confirmed" },
     { value: "Pending", label: "Pending" },
@@ -29,7 +28,6 @@ export const ApprovalMemory = ({ memory, onApprovalStatusChange }) => {
             placeholder="Approval Status"
             options={options}
             onChange={e => {
-              console.log(e);
               onApprovalStatusChange({ ...memory, approvalStatus: e.value });
             }}
             defaultValue={options.filter(option => option.label === memory.approvalStatus)}

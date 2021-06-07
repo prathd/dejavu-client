@@ -10,10 +10,9 @@ import { useLogout } from "@app/graphql/hooks/user/useLogout";
 import { useApolloClient } from "@apollo/client";
 import { Admin } from "@app/components/Admin";
 
-const AdminPage = props => {
+const AdminPage = ({ loggedInUser }) => {
   const client = useApolloClient();
   const logout = useLogout(client);
-  const user = props.loggedInUser.me;
 
   return (
     <NavigationHOC>
@@ -21,7 +20,7 @@ const AdminPage = props => {
         <Button>Home</Button>
       </Link>
       <Button onClick={logout}>Logout</Button>
-      <Admin user={user} />
+      <Admin user={loggedInUser.me} />
     </NavigationHOC>
   );
 };

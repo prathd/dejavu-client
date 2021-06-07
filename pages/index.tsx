@@ -10,6 +10,7 @@ import Link from "next/link";
 import { InitializeUser } from "@app/components/Landing";
 import { useCookies } from "react-cookie";
 import redirect from "@app/lib/redirect";
+
 const Index = ({ loggedInUser }) => {
   const client = useApolloClient();
   const logout = useLogout(client);

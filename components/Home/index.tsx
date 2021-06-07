@@ -28,7 +28,7 @@ export const Home = () => {
       const mappedGenerations = generationsResponse.data.getGenerations.map(
         generation => generation.name
       );
-      let tempSelectedGenerations = {};
+      const tempSelectedGenerations = {};
       mappedGenerations.forEach(generation => {
         tempSelectedGenerations[generation] = true;
       });
@@ -38,7 +38,7 @@ export const Home = () => {
     const initializeCategories = async () => {
       const categoriesResponse = await getCategories();
       const mappedCategories = categoriesResponse.data.getCategories.map(category => category.name);
-      let tempSelectedCategories = {};
+      const tempSelectedCategories = {};
       mappedCategories.forEach(category => {
         tempSelectedCategories[category] = true;
       });

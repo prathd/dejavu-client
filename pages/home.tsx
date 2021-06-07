@@ -9,6 +9,7 @@ import { useLogout } from "@app/graphql/hooks/user/useLogout";
 import Link from "next/link";
 import { NavigationBar } from "@app/components/Navigation";
 import { Home } from "@app/components/Home";
+import { VerificationStatusBanner } from "@app/components/VerificationStatusBanner";
 
 const HomePage = ({ loggedInUser }) => {
   const client = useApolloClient();
@@ -30,6 +31,7 @@ const HomePage = ({ loggedInUser }) => {
           <Button>Settings</Button>
         </Link>
       </NavigationBar>
+      <VerificationStatusBanner isVerified={loggedInUser.me.isVerified} />
       <Home />
     </NavigationHOC>
   );

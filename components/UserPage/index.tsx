@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import { MemoriesDisplay } from "../Home/MemoriesDisplay";
 import { UpdateUser } from "../Settings/UpdateUser";
 
-export const UserPage = props => {
-  const { user } = props;
+export const UserPage = ({ user }) => {
   const client = useApolloClient();
   const getMemories = useGetMemories(client);
   const [confirmedMemories, setConfirmedMemories] = useState([]);
@@ -32,7 +31,7 @@ export const UserPage = props => {
 
   return (
     <>
-      <UpdateUser showAllFields={true} readOnly={true} user={user} />
+      <UpdateUser showAllFields readOnly user={user} />
       <h2>Approved memories</h2>
       <MemoriesDisplay memories={confirmedMemories} />
       <h2>Pending memories</h2>

@@ -16,6 +16,7 @@ export const ME = gql`
         formattedAddress
       }
       subscribe
+      isVerified
     }
   }
 `;

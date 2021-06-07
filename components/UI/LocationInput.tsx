@@ -14,9 +14,9 @@ export interface Location {
   placeId: string;
 }
 
-export const LocationPicker = props => {
+export const LocationPicker = ({ initFromCookie, name, onChange, onPlaceSelected, value }) => {
   const [cookies] = useCookies(["latlng"]);
-  const [init, setInit] = useState(props.initFromCookie !== undefined && !props.initFromCookie);
+  const [init, setInit] = useState(initFromCookie !== undefined && !initFromCookie);
 
   const getAddressComponents = (result): Location => {
     const placeId = result.place_id,
@@ -43,7 +43,7 @@ export const LocationPicker = props => {
     apiKey: process.env.PLACES_API_KEY,
     onPlaceSelected: place => {
       const location = getAddressComponents(place);
-      props.onPlaceSelected(location);
+      onPlaceSelected(location);
     },
   });
 
@@ -57,25 +57,25 @@ export const LocationPicker = props => {
       geocode.results.forEach(result => {
         if (result.types.includes("locality") && result.types.includes("political")) {
           const location = getAddressComponents(result);
-          props.onPlaceSelected(location);
+          onPlaceSelected(location);
         }
       });
     });
   }
   return (
     <S.Input
-      name={props.name}
+      name={name}
       type="text"
       autoComplete="off"
       onChange={e => {
-        props.onChange(e);
+        onChange(e);
       }}
       onBlur={e => {
         e.target.value = "";
-        props.onChange(e);
+        onChange(e);
       }}
       ref={ref}
-      value={props.value}
+      value={value}
     />
   );
 };

@@ -2,7 +2,16 @@ import { Checkbox, FormGroup } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import React from "react";
 
-export const SideBar = props => {
+export const SideBar = ({
+  categories,
+  selectedCategories,
+  onCategorySelect,
+  onCategorySelectAll,
+  generations,
+  selectedGenerations,
+  onGenerationSelect,
+  onGenerationSelectAll,
+}) => {
   const allSelected = obj => {
     for (const key in obj) {
       if (!obj[key]) return false;
@@ -22,15 +31,15 @@ export const SideBar = props => {
     <>
       <h2>Categories</h2>
       <FormGroup row={false}>
-        {props.categories.map(category => (
+        {categories.map(category => (
           <FormControlLabel
             key={category}
             control={
               <Checkbox
                 name={category}
-                checked={props.selectedCategories[category]}
+                checked={selectedCategories[category]}
                 color="primary"
-                onClick={() => props.onCategorySelect(category)}
+                onClick={() => onCategorySelect(category)}
               />
             }
             label={category}
@@ -41,26 +50,26 @@ export const SideBar = props => {
           control={
             <Checkbox
               name="selectAll"
-              checked={allSelected(props.selectedCategories)}
-              indeterminate={isIndeterminant(props.selectedCategories)}
+              checked={allSelected(selectedCategories)}
+              indeterminate={isIndeterminant(selectedCategories)}
               color="primary"
-              onClick={() => props.onCategorySelectAll(!allSelected(props.selectedCategories))}
+              onClick={() => onCategorySelectAll(!allSelected(selectedCategories))}
             />
           }
-          label={"Select All Categories"}
+          label="Select All Categories"
         />
       </FormGroup>
       <h2>Generations</h2>
       <FormGroup row={false}>
-        {props.generations.map(generation => (
+        {generations.map(generation => (
           <FormControlLabel
             key={generation}
             control={
               <Checkbox
                 name={generation}
-                checked={props.selectedGenerations[generation]}
+                checked={selectedGenerations[generation]}
                 color="primary"
-                onClick={() => props.onGenerationSelect(generation)}
+                onClick={() => onGenerationSelect(generation)}
               />
             }
             label={generation}
@@ -71,13 +80,13 @@ export const SideBar = props => {
           control={
             <Checkbox
               name="selectAll"
-              checked={allSelected(props.selectedGenerations)}
-              indeterminate={isIndeterminant(props.selectedGenerations)}
+              checked={allSelected(selectedGenerations)}
+              indeterminate={isIndeterminant(selectedGenerations)}
               color="primary"
-              onClick={() => props.onGenerationSelectAll(!allSelected(props.selectedGenerations))}
+              onClick={() => onGenerationSelectAll(!allSelected(selectedGenerations))}
             />
           }
-          label={"Select All Categories"}
+          label="Select All Categories"
         />
       </FormGroup>
     </>
