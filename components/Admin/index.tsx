@@ -164,7 +164,8 @@ const AddMemory = ({ user, generations, categories }) => {
           setCityName(place.formattedAddress);
           setPlaceSelected(true);
         }}
-        cityName={cityName}
+        initFromCookie={undefined}
+        value={cityName}
       />
       <S.Input name="imageUrl" placeholder="Image Link" ref={register({ required: true })} />
       <S.Input name="videoUrl" placeholder="Video Link" ref={register({ required: true })} />

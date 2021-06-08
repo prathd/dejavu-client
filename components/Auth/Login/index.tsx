@@ -3,6 +3,8 @@ import { useApolloClient } from "@apollo/client";
 import { useLogin } from "@app/graphql/hooks/user/useLogin";
 import * as S from "../../styled";
 import toaster from "@app/lib/toaster";
+import React from "react";
+import Link from "next/link";
 
 type LoginInputs = {
   email: string;
@@ -31,6 +33,7 @@ export const Login = () => {
         placeholder="Password"
         ref={register({ required: true })}
       />
+      <Link href="/resetpassword">Forgot Password</Link>
       <S.Input type="submit" />
     </S.Form>
   );

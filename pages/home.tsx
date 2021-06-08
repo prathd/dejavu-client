@@ -31,7 +31,7 @@ const HomePage = ({ loggedInUser }) => {
           <Button>Settings</Button>
         </Link>
       </NavigationBar>
-      <VerificationStatusBanner isVerified={loggedInUser.me.isVerified} />
+      <VerificationStatusBanner isVerified={!loggedInUser.me || loggedInUser.me.isVerified} />
       <Home />
     </NavigationHOC>
   );

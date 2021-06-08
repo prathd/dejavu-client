@@ -7,16 +7,19 @@ import redirect from "@app/lib/redirect";
 import { initializeApollo } from "@lib/apollo";
 import Button from "@app/components/UI/Button";
 import { Login } from "@app/components/Auth/Login";
+import { NavigationBar } from "@app/components/Navigation";
 
 const LoginPage = () => {
   return (
     <NavigationHOC>
-      <Link href="/">
-        <Button>Home</Button>
-      </Link>
-      <Link href="/signup">
-        <Button>Sign Up</Button>
-      </Link>
+      <NavigationBar>
+        <Link href="/home">
+          <Button>Home</Button>
+        </Link>
+        <Link href="/signup">
+          <Button>Sign Up</Button>
+        </Link>
+      </NavigationBar>
       <Login />
     </NavigationHOC>
   );
